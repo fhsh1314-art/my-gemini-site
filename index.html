@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>穿透式监管系统 V3 演示页</title>
+<style>
+html,body{margin:0;padding:0;height:100%;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(180deg,#f5f9ff 0%,#eaf2fc 100%);color:#1f3147}
+.loader{height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.loader-title{font-size:24px;font-weight:700}
+.loader-note{font-size:14px;color:#667a91}
+</style>
+</head>
+<body>
+<div class="loader" id="loader">
+  <div class="loader-title">穿透式监管系统 V3</div>
+  <div class="loader-note">正在加载演示页面，请稍候...</div>
+</div>
+<script>
+(async function(){
+  var parts=[
+    './assets/index-v3-part-01.txt',
+    './assets/index-v3-part-02.txt',
+    './assets/index-v3-part-03.txt',
+    './assets/index-v3-part-04.txt',
+    './assets/index-v3-part-05.txt',
+    './assets/index-v3-part-06.txt',
+    './assets/index-v3-part-07.txt'
+  ];
+  try{
+    var htmlParts=await Promise.all(parts.map(function(path){
+      return fetch(path,{cache:'no-store'}).then(function(resp){
+        if(!resp.ok) throw new Error('加载失败: '+path);
+        return resp.text();
+      });
+    }));
+    var html=htmlParts.join('');
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    document.getElementById('loader').innerHTML='<div class="loader-title">页面加载失败</div><div class="loader-note">'+String(err.message||err)+'</div>';
+  }
+})();
+</script>
+</body>
+</html>
